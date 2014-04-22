@@ -1,0 +1,15 @@
+
+*/bin/
+*/target/
+*/.settings/*
+*/lost+found/
+*.bak
+*.contrib
+*.orig
+*.keep
+*.log
+*.unloaded
+*.updt
+*.dnx
+*.class
+
