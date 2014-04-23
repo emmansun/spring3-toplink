@@ -86,7 +86,7 @@ public interface TopLinkOperations {
 	 * @throws org.springframework.dao.DataAccessException in case of TopLink errors
 	 * @see oracle.toplink.sessions.Session#executeQuery(String, Class)
 	 */
-	<T> T executeNamedQuery(Class<T> entityClass, String queryName) throws DataAccessException;
+	Object executeNamedQuery(Class<?> entityClass, String queryName) throws DataAccessException;
 
 	/**
 	 * Execute a given named query with the given arguments.
@@ -100,7 +100,7 @@ public interface TopLinkOperations {
 	 * @throws org.springframework.dao.DataAccessException in case of TopLink errors
 	 * @see oracle.toplink.sessions.Session#executeQuery(String, Class)
 	 */
-	<T> T executeNamedQuery(Class<T> entityClass, String queryName, boolean enforceReadOnly)
+	Object executeNamedQuery(Class<?> entityClass, String queryName, boolean enforceReadOnly)
 			throws DataAccessException;
 
 	/**
@@ -115,7 +115,7 @@ public interface TopLinkOperations {
 	 * @throws org.springframework.dao.DataAccessException in case of TopLink errors
 	 * @see oracle.toplink.sessions.Session#executeQuery(String, Class, java.util.Vector)
 	 */
-	<T> T executeNamedQuery(Class<T> entityClass, String queryName, Object[] args) throws DataAccessException;
+	Object executeNamedQuery(Class<?> entityClass, String queryName, Object[] args) throws DataAccessException;
 
 	/**
 	 * Execute a given named query with the given arguments.
@@ -130,7 +130,7 @@ public interface TopLinkOperations {
 	 * @throws org.springframework.dao.DataAccessException in case of TopLink errors
 	 * @see oracle.toplink.sessions.Session#executeQuery(String, Class, java.util.Vector)
 	 */
-	<T> T executeNamedQuery(Class<T> entityClass, String queryName, Object[] args, boolean enforceReadOnly)
+	Object executeNamedQuery(Class<?> entityClass, String queryName, Object[] args, boolean enforceReadOnly)
 			throws DataAccessException;
 
 	/**
@@ -503,7 +503,7 @@ public interface TopLinkOperations {
 	 * @throws org.springframework.dao.DataAccessException in case of TopLink errors
 	 * @see oracle.toplink.sessions.Session#copyObject(Object)
 	 */
-	<T> List<T> copyAll(Collection<T> entities) throws DataAccessException;
+	List<Object> copyAll(Collection<?> entities) throws DataAccessException;
 
 	/**
 	 * Create detached copies of all given entity objects.
@@ -513,7 +513,7 @@ public interface TopLinkOperations {
 	 * @throws org.springframework.dao.DataAccessException in case of TopLink errors
 	 * @see oracle.toplink.sessions.Session#copyObject(Object)
 	 */
-	<T> List<T> copyAll(Collection<T> entities, ObjectCopyingPolicy copyingPolicy) throws DataAccessException;
+	List<Object> copyAll(Collection<?> entities, ObjectCopyingPolicy copyingPolicy) throws DataAccessException;
 
 	/**
 	 * Refresh the given entity object, returning the refreshed object.
@@ -558,7 +558,7 @@ public interface TopLinkOperations {
 	 * @throws org.springframework.dao.DataAccessException in case of TopLink errors
 	 * @see oracle.toplink.sessions.Session#refreshObject(Object)
 	 */
-	<T> List<T> refreshAll(Collection<T> entities) throws DataAccessException;
+	List<Object> refreshAll(Collection<?> entities) throws DataAccessException;
 
 	/**
 	 * Refresh the given entity objects, returning the corresponding refreshed objects.
@@ -573,7 +573,7 @@ public interface TopLinkOperations {
 	 * @throws org.springframework.dao.DataAccessException in case of TopLink errors
 	 * @see oracle.toplink.sessions.Session#refreshObject(Object)
 	 */
-	<T> List<T> refreshAll(Collection<T> entities, boolean enforceReadOnly) throws DataAccessException;
+	List<Object> refreshAll(Collection<?> entities, boolean enforceReadOnly) throws DataAccessException;
 
 
 	//-------------------------------------------------------------------------
@@ -606,7 +606,7 @@ public interface TopLinkOperations {
 	 * @throws org.springframework.dao.DataAccessException in case of TopLink errors
 	 * @see oracle.toplink.sessions.UnitOfWork#registerAllObjects(java.util.Collection)
 	 */
-	<T> List<T> registerAll(Collection<T> entities);
+	List<Object> registerAll(Collection<?> entities);
 
 	/**
 	 * Register the given new entity with the current UnitOfWork.
@@ -615,7 +615,7 @@ public interface TopLinkOperations {
 	 * @throws org.springframework.dao.DataAccessException in case of TopLink errors
 	 * @see oracle.toplink.sessions.UnitOfWork#registerNewObject(Object)
 	 */
-	<T> void registerNew(T entity);
+	void registerNew(Object entity);
 
 	/**
 	 * Register the given existing entity with the current UnitOfWork.
@@ -690,7 +690,7 @@ public interface TopLinkOperations {
 	 * @throws org.springframework.dao.DataAccessException in case of TopLink errors
 	 * @see oracle.toplink.sessions.UnitOfWork#deleteObject(Object)
 	 */
-	<T> void delete(T entity) throws DataAccessException;
+	void delete(Object entity) throws DataAccessException;
 
 	/**
 	 * Delete all given entities.
@@ -698,6 +698,24 @@ public interface TopLinkOperations {
 	 * @throws org.springframework.dao.DataAccessException in case of TopLink errors
 	 * @see oracle.toplink.sessions.UnitOfWork#deleteAllObjects(java.util.Collection)
 	 */
-	<T> void deleteAll(Collection<T> entities) throws DataAccessException;
+	void deleteAll(Collection<?> entities) throws DataAccessException;
 
+	/**
+	 * Assign sequence number to the object. 
+	 * This allows for an object's id to be assigned before commit. 
+	 * It can be used if the application requires to use the object id before the object exists on the database. 
+	 * Normally all ids are assigned during the commit automatically.
+	 * 
+	 * @param entity
+	 */
+	void assignSequenceNumber(Object entity) ;
+	
+	/**
+	 * Assign sequence numbers to all new objects registered in this unit of work, 
+	 * or any new objects reference by any objects registered. 
+	 * This allows for an object's id to be assigned before commit. 
+	 * It can be used if the application requires to use the object id before the object exists on the database. 
+	 * Normally all ids are assigned during the commit automatically.
+	 */
+	void assignSequenceNumbers();
 }
