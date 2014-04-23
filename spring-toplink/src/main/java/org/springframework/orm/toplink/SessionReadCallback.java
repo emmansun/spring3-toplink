@@ -39,7 +39,7 @@ import oracle.toplink.sessions.UnitOfWork;
  * @see oracle.toplink.sessions.Session#getActiveUnitOfWork()
  * @see #readFromSession(oracle.toplink.sessions.Session)
  */
-public abstract class SessionReadCallback implements TopLinkCallback {
+public abstract class SessionReadCallback<T> implements TopLinkCallback<T> {
 
 	private final boolean enforceReadOnly;
 
@@ -64,7 +64,7 @@ public abstract class SessionReadCallback implements TopLinkCallback {
 	 * or the plain Session) and delegates to <code>readFromSession</code>.
 	 * @see #readFromSession(oracle.toplink.sessions.Session)
 	 */
-	public final Object doInTopLink(Session session) throws TopLinkException {
+	public final T doInTopLink(Session session) throws TopLinkException {
 		Session sessionToUse = session;
 		if (!this.enforceReadOnly) {
 			UnitOfWork unitOfWork = session.getActiveUnitOfWork();
@@ -82,6 +82,6 @@ public abstract class SessionReadCallback implements TopLinkCallback {
 	 * @return a result object, or <code>null</code> if none
 	 * @throws TopLinkException in case of TopLink errors
 	 */
-	protected abstract Object readFromSession(Session session) throws TopLinkException;
+	protected abstract T readFromSession(Session session) throws TopLinkException;
 
 }

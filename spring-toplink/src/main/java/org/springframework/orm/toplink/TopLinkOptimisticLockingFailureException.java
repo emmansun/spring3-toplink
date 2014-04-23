@@ -27,6 +27,7 @@ import org.springframework.orm.ObjectOptimisticLockingFailureException;
  * @author Juergen Hoeller
  * @since 1.2
  */
+@SuppressWarnings("serial")
 public class TopLinkOptimisticLockingFailureException extends ObjectOptimisticLockingFailureException {
 
 	public TopLinkOptimisticLockingFailureException(OptimisticLockException ex) {

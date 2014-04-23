@@ -58,7 +58,7 @@ import org.springframework.orm.toplink.SessionFactory;
  * @see oracle.toplink.sessions.Session#getActiveSession()
  * @see oracle.toplink.sessions.Session#getActiveUnitOfWork()
  */
-public class TransactionAwareSessionAdapter implements FactoryBean {
+public class TransactionAwareSessionAdapter implements FactoryBean<Session> {
 
 	private Session session;
 
@@ -74,11 +74,11 @@ public class TransactionAwareSessionAdapter implements FactoryBean {
 	}
 
 
-	public Object getObject() {
+	public Session getObject() {
 		return this.session;
 	}
 
-	public Class getObjectType() {
+	public Class<Session> getObjectType() {
 		return Session.class;
 	}
 

@@ -133,7 +133,7 @@ public class TopLinkTemplate extends TopLinkAccessor implements TopLinkOperation
 	}
 
 
-	public Object execute(TopLinkCallback action) throws DataAccessException {
+	public <T> T execute(TopLinkCallback<T> action) throws DataAccessException {
 		Assert.notNull(action, "Callback object must not be null");
 
 		Session session = SessionFactoryUtils.getSession(getSessionFactory(), this.allowCreate);
@@ -152,7 +152,7 @@ public class TopLinkTemplate extends TopLinkAccessor implements TopLinkOperation
 		}
 	}
 
-	public List executeFind(TopLinkCallback action) throws DataAccessException {
+	public List executeFind(TopLinkCallback<?> action) throws DataAccessException {
 		Object result = execute(action);
 		if (result != null && !(result instanceof List)) {
 			throw new InvalidDataAccessApiUsageException(
@@ -166,33 +166,34 @@ public class TopLinkTemplate extends TopLinkAccessor implements TopLinkOperation
 	// Convenience methods for executing generic queries
 	//-------------------------------------------------------------------------
 
-	public Object executeNamedQuery(Class entityClass, String queryName) throws DataAccessException {
+	public <T> T executeNamedQuery(Class<T> entityClass, String queryName) throws DataAccessException {
 		return executeNamedQuery(entityClass, queryName, null, false);
 	}
 
-	public Object executeNamedQuery(Class entityClass, String queryName, boolean enforceReadOnly)
+	public <T> T executeNamedQuery(Class<T> entityClass, String queryName, boolean enforceReadOnly)
 			throws DataAccessException {
 
 		return executeNamedQuery(entityClass, queryName, null, enforceReadOnly);
 	}
 
-	public Object executeNamedQuery(Class entityClass, String queryName, Object[] args)
+	public <T> T executeNamedQuery(Class<T> entityClass, String queryName, Object[] args)
 			throws DataAccessException {
 
 		return executeNamedQuery(entityClass, queryName, args, false);
 	}
 
-	public Object executeNamedQuery(
-			final Class entityClass, final String queryName, final Object[] args, final boolean enforceReadOnly)
+	public <T> T executeNamedQuery(
+			final Class<T> entityClass, final String queryName, final Object[] args, final boolean enforceReadOnly)
 			throws DataAccessException {
 
-		return execute(new SessionReadCallback(enforceReadOnly) {
-			protected Object readFromSession(Session session) throws TopLinkException {
+		return execute(new SessionReadCallback<T>(enforceReadOnly) {
+			@SuppressWarnings("unchecked")
+			protected T readFromSession(Session session) throws TopLinkException {
 				if (args != null) {
-					return session.executeQuery(queryName, entityClass, new Vector(Arrays.asList(args)));
+					return (T)session.executeQuery(queryName, entityClass, new Vector(Arrays.asList(args)));
 				}
 				else {
-					return session.executeQuery(queryName, entityClass, new Vector());
+					return (T)session.executeQuery(queryName, entityClass, new Vector());
 				}
 			}
 		});
@@ -213,7 +214,7 @@ public class TopLinkTemplate extends TopLinkAccessor implements TopLinkOperation
 	public Object executeQuery(final DatabaseQuery query, final Object[] args, final boolean enforceReadOnly)
 			throws DataAccessException {
 
-		return execute(new SessionReadCallback(enforceReadOnly) {
+		return execute(new SessionReadCallback<Object>(enforceReadOnly) {
 			protected Object readFromSession(Session session) throws TopLinkException {
 				if (args != null) {
 					return session.executeQuery(query, new Vector(Arrays.asList(args)));
@@ -230,70 +231,72 @@ public class TopLinkTemplate extends TopLinkAccessor implements TopLinkOperation
 	// Convenience methods for reading a specific set of objects
 	//-------------------------------------------------------------------------
 
-	public List readAll(Class entityClass) throws DataAccessException {
+	public <T> List<T> readAll(Class<T> entityClass) throws DataAccessException {
 		return readAll(entityClass, false);
 	}
 
-	public List readAll(final Class entityClass, final boolean enforceReadOnly) throws DataAccessException {
-		return executeFind(new SessionReadCallback(enforceReadOnly) {
-			protected Object readFromSession(Session session) throws TopLinkException {
+	
+	@SuppressWarnings("unchecked")
+	public <T> List<T> readAll(final Class<T> entityClass, final boolean enforceReadOnly) throws DataAccessException {
+		return executeFind(new SessionReadCallback<List<T>>(enforceReadOnly) {
+			protected List<T> readFromSession(Session session) throws TopLinkException {
 				return session.readAllObjects(entityClass);
 			}
 		});
 	}
 
-	public List readAll(Class entityClass, Expression expression) throws DataAccessException {
+	public <T> List<T> readAll(Class<T> entityClass, Expression expression) throws DataAccessException {
 		return readAll(entityClass, expression, false);
 	}
 
-	public List readAll(final Class entityClass, final Expression expression, final boolean enforceReadOnly)
+	@SuppressWarnings("unchecked")
+	public <T> List<T> readAll(final Class<T> entityClass, final Expression expression, final boolean enforceReadOnly)
 			throws DataAccessException {
-
-		return executeFind(new SessionReadCallback(enforceReadOnly) {
-			protected Object readFromSession(Session session) throws TopLinkException {
+		return executeFind(new SessionReadCallback<List<T>>(enforceReadOnly) {
+			protected List<T> readFromSession(Session session) throws TopLinkException {
 				return session.readAllObjects(entityClass, expression);
 			}
 		});
 	}
 
-	public List readAll(Class entityClass, Call call) throws DataAccessException {
+	public <T> List<T> readAll(Class<T> entityClass, Call call) throws DataAccessException {
 		return readAll(entityClass, call, false);
 	}
 
-	public List readAll(final Class entityClass, final Call call, final boolean enforceReadOnly)
+	@SuppressWarnings("unchecked")
+	public <T> List<T> readAll(final Class<T> entityClass, final Call call, final boolean enforceReadOnly)
 			throws DataAccessException {
-
-		return executeFind(new SessionReadCallback(enforceReadOnly) {
-			protected Object readFromSession(Session session) throws TopLinkException {
+		return executeFind(new SessionReadCallback<List<T>>(enforceReadOnly) {
+			protected List<T> readFromSession(Session session) throws TopLinkException {
 				return session.readAllObjects(entityClass, call);
 			}
 		});
 	}
 
-	public Object read(Class entityClass, Expression expression) throws DataAccessException {
+	public <T> T read(Class<T> entityClass, Expression expression) throws DataAccessException {
 		return read(entityClass, expression, false);
 	}
 
-	public Object read(final Class entityClass, final Expression expression, final boolean enforceReadOnly)
+	public <T> T read(final Class<T> entityClass, final Expression expression, final boolean enforceReadOnly)
 			throws DataAccessException {
-
-		return execute(new SessionReadCallback(enforceReadOnly) {
-			protected Object readFromSession(Session session) throws TopLinkException {
-				return session.readObject(entityClass, expression);
+		return execute(new SessionReadCallback<T>(enforceReadOnly) {
+			@SuppressWarnings("unchecked")
+			protected T readFromSession(Session session) throws TopLinkException {
+				return (T)session.readObject(entityClass, expression);
 			}
 		});
 	}
 
-	public Object read(Class entityClass, Call call) throws DataAccessException {
+	public <T> T read(Class<T> entityClass, Call call) throws DataAccessException {
 		return read(entityClass, call, false);
 	}
 
-	public Object read(final Class entityClass, final Call call, final boolean enforceReadOnly)
+	public <T> T read(final Class<T> entityClass, final Call call, final boolean enforceReadOnly)
 			throws DataAccessException {
-
-		return execute(new SessionReadCallback(enforceReadOnly) {
-			protected Object readFromSession(Session session) throws TopLinkException {
-				return session.readObject(entityClass, call);
+		return execute(new SessionReadCallback<T>(enforceReadOnly) {
+			@SuppressWarnings("unchecked")
+			protected T readFromSession(Session session) throws TopLinkException {
+				return (T)session.readObject(entityClass, call);
 			}
 		});
 	}
@@ -303,19 +306,20 @@ public class TopLinkTemplate extends TopLinkAccessor implements TopLinkOperation
 	// Convenience methods for reading an individual object by id
 	//-------------------------------------------------------------------------
 
-	public Object readById(Class entityClass, Object id) throws DataAccessException {
+	public <T> T readById(Class<T> entityClass, Object id) throws DataAccessException {
 		return readById(entityClass, id, false);
 	}
 
-	public Object readById(Class entityClass, Object id, boolean enforceReadOnly) throws DataAccessException {
+	public <T> T readById(Class<T> entityClass, Object id, boolean enforceReadOnly) throws DataAccessException {
 		return readById(entityClass, new Object[] {id}, enforceReadOnly);
 	}
 
-	public Object readById(Class entityClass, Object[] keys) throws DataAccessException {
+	public <T> T readById(Class<T> entityClass, Object[] keys) throws DataAccessException {
 		return readById(entityClass, keys, false);
 	}
 
-	public Object readById(final Class entityClass, final Object[] keys, final boolean enforceReadOnly)
+	@SuppressWarnings("unchecked")
+	public <T> T readById(final Class<T> entityClass, final Object[] keys, final boolean enforceReadOnly)
 			throws DataAccessException {
 
 		Assert.isTrue(keys != null && keys.length > 0, "Non-empty keys or id is required");
@@ -328,29 +332,29 @@ public class TopLinkTemplate extends TopLinkAccessor implements TopLinkOperation
 			Object identifier = (keys.length == 1 ? keys[0] : StringUtils.arrayToCommaDelimitedString(keys));
 			throw new ObjectRetrievalFailureException(entityClass, identifier);
 		}
-		return result;
+		return (T)result;
 	}
 
-	public Object readAndCopy(Class entityClass, Object id) throws DataAccessException {
+	public <T> T readAndCopy(Class<T> entityClass, Object id) throws DataAccessException {
 		return readAndCopy(entityClass, id, false);
 	}
 
-	public Object readAndCopy(Class entityClass, Object id, boolean enforceReadOnly)
+	public <T> T readAndCopy(Class<T> entityClass, Object id, boolean enforceReadOnly)
 			throws DataAccessException {
 
-		Object entity = readById(entityClass, id, enforceReadOnly);
+		T entity = readById(entityClass, id, enforceReadOnly);
 		return copy(entity);
 	}
 
-	public Object readAndCopy(Class entityClass, Object[] keys) throws DataAccessException {
+	public <T> T readAndCopy(Class<T> entityClass, Object[] keys) throws DataAccessException {
 		return readAndCopy(entityClass, keys, false);
 	}
 
-	public Object readAndCopy(Class entityClass, Object[] keys, boolean enforceReadOnly)
+	public <T> T readAndCopy(Class<T> entityClass, Object[] keys, boolean enforceReadOnly)
 			throws DataAccessException {
 
-		Object entity = readById(entityClass, keys, enforceReadOnly);
-		return copy(entity);
+		T entity = readById(entityClass, keys, enforceReadOnly);
+		return (T)copy(entity);
 	}
 
 
@@ -358,68 +362,71 @@ public class TopLinkTemplate extends TopLinkAccessor implements TopLinkOperation
 	// Convenience methods for copying and refreshing objects
 	//-------------------------------------------------------------------------
 
-	public Object copy(Object entity) throws DataAccessException {
+	public <T> T copy(T entity) throws DataAccessException {
 		ObjectCopyingPolicy copyingPolicy = new ObjectCopyingPolicy();
 		copyingPolicy.cascadeAllParts();
 		copyingPolicy.setShouldResetPrimaryKey(false);
 		return copy(entity, copyingPolicy);
 	}
 
-	public Object copy(final Object entity, final ObjectCopyingPolicy copyingPolicy)
+	public <T> T copy(final T entity, final ObjectCopyingPolicy copyingPolicy)
 			throws DataAccessException {
 
-		return execute(new TopLinkCallback() {
-			public Object doInTopLink(Session session) throws TopLinkException {
-				return session.copyObject(entity, copyingPolicy);
+		return execute(new TopLinkCallback<T>() {
+			@SuppressWarnings("unchecked")
+			public T doInTopLink(Session session) throws TopLinkException {
+				return (T)session.copyObject(entity, copyingPolicy);
 			}
 		});
 	}
 
-	public List copyAll(Collection entities) throws DataAccessException {
+	public <T> List<T> copyAll(Collection<T> entities) throws DataAccessException {
 		ObjectCopyingPolicy copyingPolicy = new ObjectCopyingPolicy();
 		copyingPolicy.cascadeAllParts();
 		copyingPolicy.setShouldResetPrimaryKey(false);
 		return copyAll(entities, copyingPolicy);
 	}
 
-	public List copyAll(final Collection entities, final ObjectCopyingPolicy copyingPolicy)
+	public <T> List<T> copyAll(final Collection<T> entities, final ObjectCopyingPolicy copyingPolicy)
 			throws DataAccessException {
-
-		return (List) execute(new TopLinkCallback() {
-			public Object doInTopLink(Session session) throws TopLinkException {
-				List result = new ArrayList(entities.size());
-				for (Iterator it = entities.iterator(); it.hasNext();) {
-					Object entity = it.next();
-					result.add(session.copyObject(entity, copyingPolicy));
+		return execute(new TopLinkCallback<List<T>>() {
+			@SuppressWarnings("unchecked")
+			public List<T> doInTopLink(Session session) throws TopLinkException {
+				List<T> result = new ArrayList<T>(entities.size());
+				for (Iterator<T> it = entities.iterator(); it.hasNext();) {
+					T entity = it.next();
+					result.add((T)session.copyObject(entity, copyingPolicy));
 				}
 				return result;
 			}
 		});
 	}
 
-	public Object refresh(Object entity) throws DataAccessException {
+	public <T> T refresh(T entity) throws DataAccessException {
 		return refresh(entity, false);
 	}
 
-	public Object refresh(final Object entity, final boolean enforceReadOnly) throws DataAccessException {
-		return execute(new SessionReadCallback(enforceReadOnly) {
-			protected Object readFromSession(Session session) throws TopLinkException {
-				return session.refreshObject(entity);
+	public <T> T refresh(final T entity, final boolean enforceReadOnly) throws DataAccessException {
+		return execute(new SessionReadCallback<T>(enforceReadOnly) {
+			@SuppressWarnings("unchecked")
+			protected T readFromSession(Session session) throws TopLinkException {
+				return (T)session.refreshObject(entity);
 			}
 		});
 	}
 
-	public List refreshAll(Collection entities) throws DataAccessException {
+	public <T> List<T> refreshAll(Collection<T> entities) throws DataAccessException {
 		return refreshAll(entities, false);
 	}
 
-	public List refreshAll(final Collection entities, final boolean enforceReadOnly) throws DataAccessException {
-		return (List) execute(new SessionReadCallback(enforceReadOnly) {
-			protected Object readFromSession(Session session) throws TopLinkException {
-				List result = new ArrayList(entities.size());
-				for (Iterator it = entities.iterator(); it.hasNext();) {
-					Object entity = it.next();
-					result.add(session.refreshObject(entity));
+	public <T> List<T> refreshAll(final Collection<T> entities, final boolean enforceReadOnly) throws DataAccessException {
+		return execute(new SessionReadCallback<List<T>>(enforceReadOnly) {
+			@SuppressWarnings("unchecked")
+			protected List<T> readFromSession(Session session) throws TopLinkException {
+				List<T> result = new ArrayList<T>(entities.size());
+				for (Iterator<T> it = entities.iterator(); it.hasNext();) {
+					T entity = it.next();
+					result.add((T)session.refreshObject(entity));
 				}
 				return result;
 			}
@@ -431,80 +438,89 @@ public class TopLinkTemplate extends TopLinkAccessor implements TopLinkOperation
 	// Convenience methods for persisting and deleting objects
 	//-------------------------------------------------------------------------
 
-	public Object register(final Object entity) {
-		return execute(new UnitOfWorkCallback() {
-			protected Object doInUnitOfWork(UnitOfWork unitOfWork) throws TopLinkException {
-				return unitOfWork.registerObject(entity);
+	public <T> T register(final T entity) {
+		return execute(new UnitOfWorkCallback<T>() {
+			@SuppressWarnings("unchecked")
+			protected T doInUnitOfWork(UnitOfWork unitOfWork) throws TopLinkException {
+				return (T)unitOfWork.registerObject(entity);
 			}
 		});
 	}
 
-	public List registerAll(final Collection entities) {
-		return (List) execute(new UnitOfWorkCallback() {
-			protected Object doInUnitOfWork(UnitOfWork unitOfWork) throws TopLinkException {
+	public <T> List<T> registerAll(final Collection<T> entities) {
+		return execute(new UnitOfWorkCallback<List<T>>() {
+			@SuppressWarnings("unchecked")
+			protected List<T> doInUnitOfWork(UnitOfWork unitOfWork) throws TopLinkException {
 				return unitOfWork.registerAllObjects(entities);
 			}
 		});
 	}
 
-	public void registerNew(final Object entity) {
-		execute(new UnitOfWorkCallback() {
-			protected Object doInUnitOfWork(UnitOfWork unitOfWork) throws TopLinkException {
-				return unitOfWork.registerNewObject(entity);
+	public <T> void registerNew(final T entity) {
+		execute(new UnitOfWorkCallback<T>() {
+			@SuppressWarnings("unchecked")
+			protected T doInUnitOfWork(UnitOfWork unitOfWork) throws TopLinkException {
+				return (T)unitOfWork.registerNewObject(entity);
 			}
 		});
 	}
 
-	public Object registerExisting(final Object entity) {
-		return execute(new UnitOfWorkCallback() {
-			protected Object doInUnitOfWork(UnitOfWork unitOfWork) throws TopLinkException {
-				return unitOfWork.registerExistingObject(entity);
+	public <T> T registerExisting(final T entity) {
+		return execute(new UnitOfWorkCallback<T>() {
+			@SuppressWarnings("unchecked")
+			protected T doInUnitOfWork(UnitOfWork unitOfWork) throws TopLinkException {
+				return (T)unitOfWork.registerExistingObject(entity);
 			}
 		});
 	}
 
-	public Object merge(final Object entity) throws DataAccessException {
-		return execute(new UnitOfWorkCallback() {
-			protected Object doInUnitOfWork(UnitOfWork unitOfWork) throws TopLinkException {
-				return unitOfWork.mergeClone(entity);
+	public <T> T merge(final T entity) throws DataAccessException {
+		return execute(new UnitOfWorkCallback<T>() {
+			@SuppressWarnings("unchecked")
+			protected T doInUnitOfWork(UnitOfWork unitOfWork) throws TopLinkException {
+				return (T)unitOfWork.mergeClone(entity);
 			}
 		});
 	}
 
-	public Object deepMerge(final Object entity) throws DataAccessException {
-		return execute(new UnitOfWorkCallback() {
-			protected Object doInUnitOfWork(UnitOfWork unitOfWork) throws TopLinkException {
-				return unitOfWork.deepMergeClone(entity);
+	public <T> T deepMerge(final T entity) throws DataAccessException {
+		return execute(new UnitOfWorkCallback<T>() {
+			@SuppressWarnings("unchecked")
+			protected T doInUnitOfWork(UnitOfWork unitOfWork) throws TopLinkException {
+				return (T)unitOfWork.deepMergeClone(entity);
 			}
 		});
 	}
 
-	public Object shallowMerge(final Object entity) throws DataAccessException {
-		return execute(new UnitOfWorkCallback() {
-			protected Object doInUnitOfWork(UnitOfWork unitOfWork) throws TopLinkException {
-				return unitOfWork.shallowMergeClone(entity);
+	public <T> T shallowMerge(final T entity) throws DataAccessException {
+		return execute(new UnitOfWorkCallback<T>() {
+			@SuppressWarnings("unchecked")
+			protected T doInUnitOfWork(UnitOfWork unitOfWork) throws TopLinkException {
+				return (T)unitOfWork.shallowMergeClone(entity);
 			}
 		});
 	}
 
-	public Object mergeWithReferences(final Object entity) throws DataAccessException {
-		return execute(new UnitOfWorkCallback() {
-			protected Object doInUnitOfWork(UnitOfWork unitOfWork) throws TopLinkException {
-				return unitOfWork.mergeCloneWithReferences(entity);
+	public <T> T mergeWithReferences(final T entity) throws DataAccessException {
+		return execute(new UnitOfWorkCallback<T>() {
+			@SuppressWarnings("unchecked")
+			protected T doInUnitOfWork(UnitOfWork unitOfWork) throws TopLinkException {
+				return (T)unitOfWork.mergeCloneWithReferences(entity);
 			}
 		});
 	}
 
-	public void delete(final Object entity) throws DataAccessException {
-		execute(new UnitOfWorkCallback() {
-			protected Object doInUnitOfWork(UnitOfWork unitOfWork) throws TopLinkException {
-				return unitOfWork.deleteObject(entity);
+	public <T> void delete(final T entity) throws DataAccessException {
+		execute(new UnitOfWorkCallback<T>() {
+			@SuppressWarnings("unchecked")
+			protected T doInUnitOfWork(UnitOfWork unitOfWork) throws TopLinkException {
+				return (T)unitOfWork.deleteObject(entity);
 			}
 		});
 	}
 
-	public void deleteAll(final Collection entities) throws DataAccessException {
-		execute(new UnitOfWorkCallback() {
+	public <T> void deleteAll(final Collection<T> entities) throws DataAccessException {
+		execute(new UnitOfWorkCallback<Object>() {
 			protected Object doInUnitOfWork(UnitOfWork unitOfWork) throws TopLinkException {
 				unitOfWork.deleteAllObjects(entities);
 				return null;

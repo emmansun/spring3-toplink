@@ -33,14 +33,14 @@ import oracle.toplink.sessions.UnitOfWork;
  * @see #doInUnitOfWork(oracle.toplink.sessions.UnitOfWork)
  * @see oracle.toplink.sessions.Session#getActiveUnitOfWork()
  */
-public abstract class UnitOfWorkCallback implements TopLinkCallback {
+public abstract class UnitOfWorkCallback<T> implements TopLinkCallback<T> {
 
 	/**
 	 * Determines the UnitOfWork to work on (either the active UnitOfWork or a
 	 * temporarily acquired UnitOfWork) and delegates to <code>doInUnitOfWork</code>.
 	 * @see #doInUnitOfWork(oracle.toplink.sessions.UnitOfWork)
 	 */
-	public final Object doInTopLink(Session session) throws TopLinkException {
+	public final T doInTopLink(Session session) throws TopLinkException {
 		// Fetch active UnitOfWork or acquire temporary UnitOfWork.
 		UnitOfWork unitOfWork = session.getActiveUnitOfWork();
 		boolean newUnitOfWork = false;
@@ -52,7 +52,7 @@ public abstract class UnitOfWorkCallback implements TopLinkCallback {
 		// Perform callback operation, committing the UnitOfWork unless
 		// it is the active UnitOfWork of an externally managed transaction.
 		try {
-			Object result = doInUnitOfWork(unitOfWork);
+			T result = doInUnitOfWork(unitOfWork);
 			if (newUnitOfWork) {
 				unitOfWork.commit();
 			}
@@ -72,6 +72,6 @@ public abstract class UnitOfWorkCallback implements TopLinkCallback {
 	 * @return a result object, or <code>null</code> if none
 	 * @throws TopLinkException in case of TopLink errors
 	 */
-	protected abstract Object doInUnitOfWork(UnitOfWork unitOfWork) throws TopLinkException;
+	protected abstract T doInUnitOfWork(UnitOfWork unitOfWork) throws TopLinkException;
 
 }

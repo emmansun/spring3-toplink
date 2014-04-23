@@ -29,6 +29,7 @@ import org.springframework.dao.UncategorizedDataAccessException;
  * @since 1.2
  * @see SessionFactoryUtils#convertTopLinkAccessException
  */
+@SuppressWarnings("serial")
 public class TopLinkSystemException extends UncategorizedDataAccessException {
 
 	public TopLinkSystemException(TopLinkException ex) {

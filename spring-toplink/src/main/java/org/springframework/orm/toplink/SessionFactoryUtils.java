@@ -30,7 +30,6 @@ import org.springframework.dao.ConcurrencyFailureException;
 import org.springframework.dao.DataAccessException;
 import org.springframework.dao.DataAccessResourceFailureException;
 import org.springframework.dao.TypeMismatchDataAccessException;
-import org.springframework.transaction.support.ResourceHolder;
 import org.springframework.transaction.support.ResourceHolderSynchronization;
 import org.springframework.transaction.support.TransactionSynchronizationManager;
 import org.springframework.util.Assert;
@@ -217,7 +216,7 @@ public abstract class SessionFactoryUtils {
 	 * i.e. when participating in a JtaTransactionManager transaction.
 	 * @see org.springframework.transaction.jta.JtaTransactionManager
 	 */
-	private static class SessionSynchronization extends ResourceHolderSynchronization {
+	private static class SessionSynchronization extends ResourceHolderSynchronization<SessionHolder, SessionFactory> {
 
 		public SessionSynchronization(SessionHolder sessionHolder, SessionFactory sessionFactory) {
 			super(sessionHolder, sessionFactory);
@@ -227,8 +226,8 @@ public abstract class SessionFactoryUtils {
 			return false;
 		}
 
-		protected void releaseResource(ResourceHolder resourceHolder, Object resourceKey) {
-			releaseSession(((SessionHolder) resourceHolder).getSession(), (SessionFactory) resourceKey);
+		protected void releaseResource(SessionHolder resourceHolder, SessionFactory resourceKey) {
+			releaseSession(resourceHolder.getSession(), resourceKey);
 		}
 	}
 

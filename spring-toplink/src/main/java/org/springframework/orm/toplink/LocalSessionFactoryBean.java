@@ -61,7 +61,7 @@ import org.springframework.jdbc.support.SQLExceptionTranslator;
  * @see org.springframework.dao.annotation.PersistenceExceptionTranslationPostProcessor
  */
 public class LocalSessionFactoryBean extends LocalSessionFactory
-		implements FactoryBean, BeanClassLoaderAware, InitializingBean, DisposableBean, PersistenceExceptionTranslator {
+		implements FactoryBean<SessionFactory>, BeanClassLoaderAware, InitializingBean, DisposableBean, PersistenceExceptionTranslator {
 
 	private SessionFactory sessionFactory;
 
@@ -101,11 +101,11 @@ public class LocalSessionFactoryBean extends LocalSessionFactory
 	}
 
 
-	public Object getObject() {
+	public SessionFactory getObject() {
 		return this.sessionFactory;
 	}
 
-	public Class getObjectType() {
+	public Class<? extends SessionFactory> getObjectType() {
 		return (this.sessionFactory != null ? this.sessionFactory.getClass() : SessionFactory.class);
 	}
 

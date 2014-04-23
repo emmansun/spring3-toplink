@@ -46,7 +46,7 @@ import oracle.toplink.sessions.Session;
  * @see TopLinkTemplate
  * @see TopLinkTransactionManager
  */
-public interface TopLinkCallback {
+public interface TopLinkCallback<T> {
 
 	/**
 	 * Gets called by <code>TopLinkTemplate.execute</code> with an active
@@ -72,6 +72,6 @@ public interface TopLinkCallback {
 	 * @see TopLinkTemplate#execute
 	 * @see TopLinkTemplate#executeFind
 	 */
-	Object doInTopLink(Session session) throws TopLinkException;
+	T doInTopLink(Session session) throws TopLinkException;
 
 }

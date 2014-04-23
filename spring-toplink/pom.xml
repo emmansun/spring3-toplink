@@ -4,7 +4,7 @@
 
 	<groupId>org.springframework.orm.toplink</groupId>
 	<artifactId>spring-orm-toplink</artifactId>
-	<version>1.0</version>
+	<version>1.1</version>
 	<packaging>jar</packaging>
 
 	<name>Spring ORM Toplink</name>

@@ -126,7 +126,7 @@ public class LocalSessionFactory {
 
 	private DatabaseLogin databaseLogin;
 
-	private final Map loginPropertyMap = new HashMap();
+	private final Map<Object, Object> loginPropertyMap = new HashMap<Object, Object>();
 
 	private DataSource dataSource;
 
@@ -209,7 +209,7 @@ public class LocalSessionFactory {
 	 * <p>Can be populated with a "map" or "props" element in XML bean definitions.
 	 * @see oracle.toplink.sessions.DatabaseLogin
 	 */
-	public void setLoginPropertyMap(Map loginProperties) {
+	public void setLoginPropertyMap(Map<Object, Object> loginProperties) {
 		if (loginProperties != null) {
 			this.loginPropertyMap.putAll(loginProperties);
 		}
@@ -222,7 +222,7 @@ public class LocalSessionFactory {
 	 * "loginPropertyMap[tableQualifier]".
 	 * @see oracle.toplink.sessions.DatabaseLogin
 	 */
-	public Map getLoginPropertyMap() {
+	public Map<Object, Object> getLoginPropertyMap() {
 		return this.loginPropertyMap;
 	}
 

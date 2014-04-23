@@ -58,7 +58,7 @@ public interface TopLinkOperations {
 	 * @see org.springframework.transaction
 	 * @see oracle.toplink.sessions.Session
 	 */
-	Object execute(TopLinkCallback action) throws DataAccessException;
+	<T> T execute(TopLinkCallback<T> action) throws DataAccessException;
 
 	/**
 	 * Execute the specified action assuming that the result object is a
@@ -68,7 +68,7 @@ public interface TopLinkOperations {
 	 * @return a Collection result returned by the action, or <code>null</code>
 	 * @throws org.springframework.dao.DataAccessException in case of TopLink errors
 	 */
-	List executeFind(TopLinkCallback action) throws DataAccessException;
+	List executeFind(TopLinkCallback<?> action) throws DataAccessException;
 
 
 	//-------------------------------------------------------------------------
@@ -86,7 +86,7 @@ public interface TopLinkOperations {
 	 * @throws org.springframework.dao.DataAccessException in case of TopLink errors
 	 * @see oracle.toplink.sessions.Session#executeQuery(String, Class)
 	 */
-	Object executeNamedQuery(Class entityClass, String queryName) throws DataAccessException;
+	<T> T executeNamedQuery(Class<T> entityClass, String queryName) throws DataAccessException;
 
 	/**
 	 * Execute a given named query with the given arguments.
@@ -100,7 +100,7 @@ public interface TopLinkOperations {
 	 * @throws org.springframework.dao.DataAccessException in case of TopLink errors
 	 * @see oracle.toplink.sessions.Session#executeQuery(String, Class)
 	 */
-	Object executeNamedQuery(Class entityClass, String queryName, boolean enforceReadOnly)
+	<T> T executeNamedQuery(Class<T> entityClass, String queryName, boolean enforceReadOnly)
 			throws DataAccessException;
 
 	/**
@@ -115,7 +115,7 @@ public interface TopLinkOperations {
 	 * @throws org.springframework.dao.DataAccessException in case of TopLink errors
 	 * @see oracle.toplink.sessions.Session#executeQuery(String, Class, java.util.Vector)
 	 */
-	Object executeNamedQuery(Class entityClass, String queryName, Object[] args) throws DataAccessException;
+	<T> T executeNamedQuery(Class<T> entityClass, String queryName, Object[] args) throws DataAccessException;
 
 	/**
 	 * Execute a given named query with the given arguments.
@@ -130,7 +130,7 @@ public interface TopLinkOperations {
 	 * @throws org.springframework.dao.DataAccessException in case of TopLink errors
 	 * @see oracle.toplink.sessions.Session#executeQuery(String, Class, java.util.Vector)
 	 */
-	Object executeNamedQuery(Class entityClass, String queryName, Object[] args, boolean enforceReadOnly)
+	<T> T executeNamedQuery(Class<T> entityClass, String queryName, Object[] args, boolean enforceReadOnly)
 			throws DataAccessException;
 
 	/**
@@ -204,7 +204,7 @@ public interface TopLinkOperations {
 	 * @throws org.springframework.dao.DataAccessException in case of TopLink errors
 	 * @see oracle.toplink.sessions.Session#readAllObjects(Class)
 	 */
-	List readAll(Class entityClass) throws DataAccessException;
+	<T> List<T> readAll(Class<T> entityClass) throws DataAccessException;
 
 	/**
 	 * Read all entity instances of the given class.
@@ -216,7 +216,7 @@ public interface TopLinkOperations {
 	 * @throws org.springframework.dao.DataAccessException in case of TopLink errors
 	 * @see oracle.toplink.sessions.Session#readAllObjects(Class)
 	 */
-	List readAll(Class entityClass, boolean enforceReadOnly) throws DataAccessException;
+	<T> List<T> readAll(Class<T> entityClass, boolean enforceReadOnly) throws DataAccessException;
 
 	/**
 	 * Read all entity instances of the given class that match the given expression.
@@ -230,7 +230,7 @@ public interface TopLinkOperations {
 	 * @see oracle.toplink.sessions.Session#readAllObjects(Class, oracle.toplink.expressions.Expression)
 	 * @see oracle.toplink.expressions.ExpressionBuilder
 	 */
-	List readAll(Class entityClass, Expression expression) throws DataAccessException;
+	<T> List<T> readAll(Class<T> entityClass, Expression expression) throws DataAccessException;
 
 	/**
 	 * Read all entity instances of the given class that match the given expression.
@@ -245,7 +245,7 @@ public interface TopLinkOperations {
 	 * @see oracle.toplink.sessions.Session#readAllObjects(Class, oracle.toplink.expressions.Expression)
 	 * @see oracle.toplink.expressions.ExpressionBuilder
 	 */
-	List readAll(Class entityClass, Expression expression, boolean enforceReadOnly)
+	<T> List<T> readAll(Class<T> entityClass, Expression expression, boolean enforceReadOnly)
 			throws DataAccessException;
 
 	/**
@@ -260,7 +260,7 @@ public interface TopLinkOperations {
 	 * @see oracle.toplink.queryframework.SQLCall
 	 * @see oracle.toplink.queryframework.EJBQLCall
 	 */
-	List readAll(Class entityClass, Call call) throws DataAccessException;
+	<T> List<T> readAll(Class<T> entityClass, Call call) throws DataAccessException;
 
 	/**
 	 * Read all entity instances of the given class, as returned by the given call.
@@ -275,7 +275,7 @@ public interface TopLinkOperations {
 	 * @see oracle.toplink.queryframework.SQLCall
 	 * @see oracle.toplink.queryframework.EJBQLCall
 	 */
-	List readAll(Class entityClass, Call call, boolean enforceReadOnly) throws DataAccessException;
+	<T> List<T> readAll(Class<T> entityClass, Call call, boolean enforceReadOnly) throws DataAccessException;
 
 	/**
 	 * Read an entity instance of the given class that matches the given expression.
@@ -289,7 +289,7 @@ public interface TopLinkOperations {
 	 * @see oracle.toplink.sessions.Session#readAllObjects(Class, oracle.toplink.expressions.Expression)
 	 * @see oracle.toplink.expressions.ExpressionBuilder
 	 */
-	Object read(Class entityClass, Expression expression) throws DataAccessException;
+	<T> T read(Class<T> entityClass, Expression expression) throws DataAccessException;
 
 	/**
 	 * Read an entity instance of the given class that matches the given expression.
@@ -304,7 +304,7 @@ public interface TopLinkOperations {
 	 * @see oracle.toplink.sessions.Session#readAllObjects(Class, oracle.toplink.expressions.Expression)
 	 * @see oracle.toplink.expressions.ExpressionBuilder
 	 */
-	Object read(Class entityClass, Expression expression, boolean enforceReadOnly)
+	<T> T read(Class<T> entityClass, Expression expression, boolean enforceReadOnly)
 			throws DataAccessException;
 
 	/**
@@ -319,7 +319,7 @@ public interface TopLinkOperations {
 	 * @see oracle.toplink.queryframework.SQLCall
 	 * @see oracle.toplink.queryframework.EJBQLCall
 	 */
-	Object read(Class entityClass, Call call) throws DataAccessException;
+	<T> T read(Class<T> entityClass, Call call) throws DataAccessException;
 
 	/**
 	 * Read an entity instance of the given class, as returned by the given call.
@@ -334,7 +334,7 @@ public interface TopLinkOperations {
 	 * @see oracle.toplink.queryframework.SQLCall
 	 * @see oracle.toplink.queryframework.EJBQLCall
 	 */
-	Object read(Class entityClass, Call call, boolean enforceReadOnly)
+	<T> T read(Class<T> entityClass, Call call, boolean enforceReadOnly)
 			throws DataAccessException;
 
 
@@ -354,7 +354,7 @@ public interface TopLinkOperations {
 	 * @throws org.springframework.dao.DataAccessException in case of TopLink errors
 	 * @see oracle.toplink.queryframework.ReadObjectQuery#setSelectionKey(java.util.Vector)
 	 */
-	Object readById(Class entityClass, Object id) throws DataAccessException;
+	<T> T readById(Class<T> entityClass, Object id) throws DataAccessException;
 
 	/**
 	 * Read the entity instance of the given class with the given id,
@@ -369,7 +369,7 @@ public interface TopLinkOperations {
 	 * @throws org.springframework.dao.DataAccessException in case of TopLink errors
 	 * @see oracle.toplink.queryframework.ReadObjectQuery#setSelectionKey(java.util.Vector)
 	 */
-	Object readById(Class entityClass, Object id, boolean enforceReadOnly) throws DataAccessException;
+	<T> T readById(Class<T> entityClass, Object id, boolean enforceReadOnly) throws DataAccessException;
 
 	/**
 	 * Read the entity instance of the given class with the given composite id,
@@ -383,7 +383,7 @@ public interface TopLinkOperations {
 	 * @throws org.springframework.dao.DataAccessException in case of TopLink errors
 	 * @see oracle.toplink.queryframework.ReadObjectQuery#setSelectionKey(java.util.Vector)
 	 */
-	Object readById(Class entityClass, Object[] keys) throws DataAccessException;
+	<T> T readById(Class<T> entityClass, Object[] keys) throws DataAccessException;
 
 	/**
 	 * Read the entity instance of the given class with the given composite id,
@@ -398,7 +398,7 @@ public interface TopLinkOperations {
 	 * @throws org.springframework.dao.DataAccessException in case of TopLink errors
 	 * @see oracle.toplink.queryframework.ReadObjectQuery#setSelectionKey(java.util.Vector)
 	 */
-	Object readById(Class entityClass, Object[] keys, boolean enforceReadOnly) throws DataAccessException;
+	<T> T readById(Class<T> entityClass, Object[] keys, boolean enforceReadOnly) throws DataAccessException;
 
 	/**
 	 * Read the entity instance of the given class with the given id,
@@ -415,7 +415,7 @@ public interface TopLinkOperations {
 	 * @see oracle.toplink.queryframework.ReadObjectQuery#setSelectionKey(java.util.Vector)
 	 * @see oracle.toplink.sessions.Session#copyObject(Object)
 	 */
-	Object readAndCopy(Class entityClass, Object id) throws DataAccessException;
+	<T> T readAndCopy(Class<T> entityClass, Object id) throws DataAccessException;
 
 	/**
 	 * Read the entity instance of the given class with the given id,
@@ -433,7 +433,7 @@ public interface TopLinkOperations {
 	 * @see oracle.toplink.queryframework.ReadObjectQuery#setSelectionKey(java.util.Vector)
 	 * @see oracle.toplink.sessions.Session#copyObject(Object)
 	 */
-	Object readAndCopy(Class entityClass, Object id, boolean enforceReadOnly) throws DataAccessException;
+	<T> T readAndCopy(Class<T> entityClass, Object id, boolean enforceReadOnly) throws DataAccessException;
 
 	/**
 	 * Read the entity instance of the given class with the given composite id,
@@ -450,7 +450,7 @@ public interface TopLinkOperations {
 	 * @see oracle.toplink.queryframework.ReadObjectQuery#setSelectionKey(java.util.Vector)
 	 * @see oracle.toplink.sessions.Session#copyObject(Object)
 	 */
-	Object readAndCopy(Class entityClass, Object[] keys) throws DataAccessException;
+	<T> T readAndCopy(Class<T> entityClass, Object[] keys) throws DataAccessException;
 
 	/**
 	 * Read the entity instance of the given class with the given composite id,
@@ -468,7 +468,7 @@ public interface TopLinkOperations {
 	 * @see oracle.toplink.queryframework.ReadObjectQuery#setSelectionKey(java.util.Vector)
 	 * @see oracle.toplink.sessions.Session#copyObject(Object)
 	 */
-	Object readAndCopy(Class entityClass, Object[] keys, boolean enforceReadOnly) throws DataAccessException;
+	<T> T readAndCopy(Class<T> entityClass, Object[] keys, boolean enforceReadOnly) throws DataAccessException;
 
 
 	//-------------------------------------------------------------------------
@@ -483,7 +483,7 @@ public interface TopLinkOperations {
 	 * @throws org.springframework.dao.DataAccessException in case of TopLink errors
 	 * @see oracle.toplink.sessions.Session#copyObject(Object)
 	 */
-	Object copy(Object entity) throws DataAccessException;
+	<T> T copy(T entity) throws DataAccessException;
 
 	/**
 	 * Create a detached copy of the given entity object.
@@ -493,7 +493,7 @@ public interface TopLinkOperations {
 	 * @throws org.springframework.dao.DataAccessException in case of TopLink errors
 	 * @see oracle.toplink.sessions.Session#copyObject(Object, oracle.toplink.sessions.ObjectCopyingPolicy)
 	 */
-	Object copy(Object entity, ObjectCopyingPolicy copyingPolicy) throws DataAccessException;
+	<T> T copy(T entity, ObjectCopyingPolicy copyingPolicy) throws DataAccessException;
 
 	/**
 	 * Create detached copies of all given entity objects,
@@ -503,7 +503,7 @@ public interface TopLinkOperations {
 	 * @throws org.springframework.dao.DataAccessException in case of TopLink errors
 	 * @see oracle.toplink.sessions.Session#copyObject(Object)
 	 */
-	List copyAll(Collection entities) throws DataAccessException;
+	<T> List<T> copyAll(Collection<T> entities) throws DataAccessException;
 
 	/**
 	 * Create detached copies of all given entity objects.
@@ -513,7 +513,7 @@ public interface TopLinkOperations {
 	 * @throws org.springframework.dao.DataAccessException in case of TopLink errors
 	 * @see oracle.toplink.sessions.Session#copyObject(Object)
 	 */
-	List copyAll(Collection entities, ObjectCopyingPolicy copyingPolicy) throws DataAccessException;
+	<T> List<T> copyAll(Collection<T> entities, ObjectCopyingPolicy copyingPolicy) throws DataAccessException;
 
 	/**
 	 * Refresh the given entity object, returning the refreshed object.
@@ -527,7 +527,7 @@ public interface TopLinkOperations {
 	 * @throws org.springframework.dao.DataAccessException in case of TopLink errors
 	 * @see oracle.toplink.sessions.Session#refreshObject(Object)
 	 */
-	Object refresh(Object entity) throws DataAccessException;
+	<T> T refresh(T entity) throws DataAccessException;
 
 	/**
 	 * Refresh the given entity object, returning the refreshed object.
@@ -544,7 +544,7 @@ public interface TopLinkOperations {
 	 * @throws org.springframework.dao.DataAccessException in case of TopLink errors
 	 * @see oracle.toplink.sessions.Session#refreshObject(Object)
 	 */
-	Object refresh(Object entity, boolean enforceReadOnly) throws DataAccessException;
+	<T> T refresh(T entity, boolean enforceReadOnly) throws DataAccessException;
 
 	/**
 	 * Refresh the given entity objects, returning the corresponding refreshed objects.
@@ -558,7 +558,7 @@ public interface TopLinkOperations {
 	 * @throws org.springframework.dao.DataAccessException in case of TopLink errors
 	 * @see oracle.toplink.sessions.Session#refreshObject(Object)
 	 */
-	List refreshAll(Collection entities) throws DataAccessException;
+	<T> List<T> refreshAll(Collection<T> entities) throws DataAccessException;
 
 	/**
 	 * Refresh the given entity objects, returning the corresponding refreshed objects.
@@ -573,7 +573,7 @@ public interface TopLinkOperations {
 	 * @throws org.springframework.dao.DataAccessException in case of TopLink errors
 	 * @see oracle.toplink.sessions.Session#refreshObject(Object)
 	 */
-	List refreshAll(Collection entities, boolean enforceReadOnly) throws DataAccessException;
+	<T> List<T> refreshAll(Collection<T> entities, boolean enforceReadOnly) throws DataAccessException;
 
 
 	//-------------------------------------------------------------------------
@@ -595,7 +595,7 @@ public interface TopLinkOperations {
 	 * @see #registerNew(Object)
 	 * @see #registerExisting(Object)
 	 */
-	Object register(Object entity);
+	<T> T register(T entity);
 
 	/**
 	 * Register all given entities with the current UnitOfWork.
@@ -606,7 +606,7 @@ public interface TopLinkOperations {
 	 * @throws org.springframework.dao.DataAccessException in case of TopLink errors
 	 * @see oracle.toplink.sessions.UnitOfWork#registerAllObjects(java.util.Collection)
 	 */
-	List registerAll(Collection entities);
+	<T> List<T> registerAll(Collection<T> entities);
 
 	/**
 	 * Register the given new entity with the current UnitOfWork.
@@ -615,7 +615,7 @@ public interface TopLinkOperations {
 	 * @throws org.springframework.dao.DataAccessException in case of TopLink errors
 	 * @see oracle.toplink.sessions.UnitOfWork#registerNewObject(Object)
 	 */
-	void registerNew(Object entity);
+	<T> void registerNew(T entity);
 
 	/**
 	 * Register the given existing entity with the current UnitOfWork.
@@ -626,7 +626,7 @@ public interface TopLinkOperations {
 	 * @throws org.springframework.dao.DataAccessException in case of TopLink errors
 	 * @see oracle.toplink.sessions.UnitOfWork#registerExistingObject(Object)
 	 */
-	Object registerExisting(Object entity);
+	<T> T registerExisting(T entity);
 
 	/**
 	 * Reassociate the given entity copy with the current UnitOfWork,
@@ -640,7 +640,7 @@ public interface TopLinkOperations {
 	 * @throws org.springframework.dao.DataAccessException in case of TopLink errors
 	 * @see oracle.toplink.sessions.UnitOfWork#mergeClone(Object)
 	 */
-	Object merge(Object entity) throws DataAccessException;
+	<T> T merge(T entity) throws DataAccessException;
 
 	/**
 	 * Reassociate the given entity copy with the current UnitOfWork,
@@ -654,7 +654,7 @@ public interface TopLinkOperations {
 	 * @throws org.springframework.dao.DataAccessException in case of TopLink errors
 	 * @see oracle.toplink.sessions.UnitOfWork#deepMergeClone(Object)
 	 */
-	Object deepMerge(Object entity) throws DataAccessException;
+	<T> T deepMerge(T entity) throws DataAccessException;
 
 	/**
 	 * Reassociate the given entity copy with the current UnitOfWork,
@@ -668,7 +668,7 @@ public interface TopLinkOperations {
 	 * @throws org.springframework.dao.DataAccessException in case of TopLink errors
 	 * @see oracle.toplink.sessions.UnitOfWork#shallowMergeClone(Object)
 	 */
-	Object shallowMerge(Object entity) throws DataAccessException;
+	<T> T shallowMerge(T entity) throws DataAccessException;
 
 	/**
 	 * Reassociate the given entity copy with the current UnitOfWork,
@@ -682,7 +682,7 @@ public interface TopLinkOperations {
 	 * @throws org.springframework.dao.DataAccessException in case of TopLink errors
 	 * @see oracle.toplink.sessions.UnitOfWork#mergeCloneWithReferences(Object)
 	 */
-	Object mergeWithReferences(Object entity) throws DataAccessException;
+	<T> T mergeWithReferences(T entity) throws DataAccessException;
 
 	/**
 	 * Delete the given entity.
@@ -690,7 +690,7 @@ public interface TopLinkOperations {
 	 * @throws org.springframework.dao.DataAccessException in case of TopLink errors
 	 * @see oracle.toplink.sessions.UnitOfWork#deleteObject(Object)
 	 */
-	void delete(Object entity) throws DataAccessException;
+	<T> void delete(T entity) throws DataAccessException;
 
 	/**
 	 * Delete all given entities.
@@ -698,6 +698,6 @@ public interface TopLinkOperations {
 	 * @throws org.springframework.dao.DataAccessException in case of TopLink errors
 	 * @see oracle.toplink.sessions.UnitOfWork#deleteAllObjects(java.util.Collection)
 	 */
-	void deleteAll(Collection entities) throws DataAccessException;
+	<T> void deleteAll(Collection<T> entities) throws DataAccessException;
 
 }

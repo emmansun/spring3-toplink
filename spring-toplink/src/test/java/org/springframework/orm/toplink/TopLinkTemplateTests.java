@@ -32,7 +32,7 @@ public class TopLinkTemplateTests {
 		template.setAllowCreate(false);
 		template.setSessionFactory(factory);
 		try {
-			template.execute(new TopLinkCallback() {
+			template.execute(new TopLinkCallback<Object>() {
 				public Object doInTopLink(Session session)
 						throws TopLinkException {
 				return null;
@@ -57,7 +57,7 @@ public class TopLinkTemplateTests {
 		TopLinkTemplate template = new TopLinkTemplate();
 		template.setAllowCreate(true);
 		template.setSessionFactory(factory);
-		template.execute(new TopLinkCallback() {
+		template.execute(new TopLinkCallback<Object>() {
 			public Object doInTopLink(Session session) throws TopLinkException {
 				assertTrue(session != null);
 				return null;
@@ -82,7 +82,7 @@ public class TopLinkTemplateTests {
 		TopLinkTemplate template = new TopLinkTemplate();
 		template.setAllowCreate(false);
 		template.setSessionFactory(factory);
-		template.execute(new TopLinkCallback() {
+		template.execute(new TopLinkCallback<Object>() {
 			public Object doInTopLink(Session session) throws TopLinkException {
 				assertTrue(session != null);
 				return null;
@@ -107,7 +107,7 @@ public class TopLinkTemplateTests {
 		TopLinkTemplate template = new TopLinkTemplate();
 		template.setAllowCreate(true);
 		template.setSessionFactory(factory);
-		template.execute(new TopLinkCallback() {
+		template.execute(new TopLinkCallback<Object>() {
 			public Object doInTopLink(Session session) throws TopLinkException {
 				assertTrue(session != null);
 				return null;
