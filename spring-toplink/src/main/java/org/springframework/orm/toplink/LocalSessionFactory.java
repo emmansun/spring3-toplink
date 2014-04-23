@@ -350,7 +350,7 @@ public class LocalSessionFactory {
 		Method setLoginMethod = null;
 		try {
 			// Search for the new 10.1.3 Login interface...
-			Class loginClass = DatabaseSession.class.getClassLoader().loadClass("oracle.toplink.sessions.Login");
+			Class<?> loginClass = DatabaseSession.class.getClassLoader().loadClass("oracle.toplink.sessions.Login");
 			setLoginMethod = DatabaseSession.class.getMethod("setLogin", new Class[] {loginClass});
 			if (logger.isDebugEnabled()) {
 				logger.debug("Using TopLink 10.1.3 setLogin(Login) API");
@@ -389,14 +389,14 @@ public class LocalSessionFactory {
 		Method getSessionMethod = null;
 		Object loader = null;
 		try {
-			Class loaderClass = SessionManager.class.getClassLoader().loadClass(
+			Class<?> loaderClass = SessionManager.class.getClassLoader().loadClass(
 					"oracle.toplink.tools.sessionconfiguration.XMLSessionConfigLoader");
 			getSessionMethod = SessionManager.class.getMethod("getSession",
 					new Class[] {loaderClass, String.class, ClassLoader.class, boolean.class, boolean.class, boolean.class});
 			if (logger.isDebugEnabled()) {
 				logger.debug("Using TopLink 10.1.3 XMLSessionConfigLoader");
 			}
-			Constructor ctor = loaderClass.getConstructor(new Class[] {String.class});
+			Constructor<?> ctor = loaderClass.getConstructor(new Class[] {String.class});
 			loader = ctor.newInstance(new Object[] {configLocation});
 		}
 		catch (Exception ex) {
