@@ -25,7 +25,7 @@ import org.springframework.orm.ObjectOptimisticLockingFailureException;
  * Converts TopLink's OptimisticLockException.
  *
  * @author Juergen Hoeller
- * @since 1.2
+ * @since Spring framework 1.2
  */
 @SuppressWarnings("serial")
 public class TopLinkOptimisticLockingFailureException extends ObjectOptimisticLockingFailureException {

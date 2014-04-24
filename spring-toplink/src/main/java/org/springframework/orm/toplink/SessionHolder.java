@@ -29,7 +29,7 @@ import org.springframework.util.Assert;
  * <p>Note: This is an SPI class, not intended to be used by applications.
  *
  * @author Juergen Hoeller
- * @since 1.2
+ * @since Spring framework 1.2
  */
 public class SessionHolder extends ResourceHolderSupport {
 

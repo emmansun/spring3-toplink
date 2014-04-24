@@ -34,7 +34,7 @@ import org.apache.commons.logging.LogFactory;
  * <p>Delegates to two template methods:
  *
  * @author Juergen Hoeller
- * @since 1.2.6
+ * @since Spring framework 1.2.6
  * @see #getMasterSession()
  * @see #createClientSession()
  */

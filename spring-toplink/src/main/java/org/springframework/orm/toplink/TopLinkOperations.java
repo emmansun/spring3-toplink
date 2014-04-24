@@ -38,7 +38,7 @@ import org.springframework.dao.DataAccessException;
  * on the semantics of those methods.
  *
  * @author Juergen Hoeller
- * @since 1.2
+ * @since Spring framework 1.2
  */
 public interface TopLinkOperations {
 
@@ -707,6 +707,7 @@ public interface TopLinkOperations {
 	 * Normally all ids are assigned during the commit automatically.
 	 * 
 	 * @param entity
+	 * @since 1.1
 	 */
 	void assignSequenceNumber(Object entity) ;
 	
@@ -716,6 +717,7 @@ public interface TopLinkOperations {
 	 * This allows for an object's id to be assigned before commit. 
 	 * It can be used if the application requires to use the object id before the object exists on the database. 
 	 * Normally all ids are assigned during the commit automatically.
+	 * @since 1.1
 	 */
 	void assignSequenceNumbers();
 }

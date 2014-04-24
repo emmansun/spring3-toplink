@@ -27,7 +27,7 @@ import oracle.toplink.sessions.Session;
  * <b>In a server environment, use ServerSessionFactory instead.</code>
  *
  * @author Juergen Hoeller
- * @since 1.2
+ * @since Spring framework 1.2
  * @see ServerSessionFactory
  */
 public class SingleSessionFactory implements SessionFactory {

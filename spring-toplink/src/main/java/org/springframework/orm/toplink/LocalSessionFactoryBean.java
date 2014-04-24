@@ -55,7 +55,7 @@ import org.springframework.jdbc.support.SQLExceptionTranslator;
  * defining a bean reference that points directly at the LocalSessionFactoryBean.
  *
  * @author Juergen Hoeller
- * @since 1.2
+ * @since Spring framework 1.2
  * @see LocalSessionFactory
  * @see org.springframework.orm.toplink.support.TransactionAwareSessionAdapter
  * @see org.springframework.dao.annotation.PersistenceExceptionTranslationPostProcessor

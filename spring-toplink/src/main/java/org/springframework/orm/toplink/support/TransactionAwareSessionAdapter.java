@@ -52,7 +52,7 @@ import org.springframework.orm.toplink.SessionFactory;
  * is just a convenient way to expose such a Session in a declarative fashion.
  *
  * @author Juergen Hoeller
- * @since 1.2
+ * @since Spring framework 1.2
  * @see org.springframework.orm.toplink.LocalSessionFactoryBean
  * @see org.springframework.orm.toplink.SessionFactory#createTransactionAwareSession()
  * @see oracle.toplink.sessions.Session#getActiveSession()

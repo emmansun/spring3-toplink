@@ -31,7 +31,7 @@ import oracle.toplink.sessions.Session;
  * classes, to allow for keeping TopLink-based DAOs as independent as possible.
  *
  * @author Juergen Hoeller
- * @since 1.2
+ * @since Spring framework 1.2
  * @see TopLinkAccessor#setSessionFactory
  * @see TopLinkTransactionManager#setSessionFactory
  */

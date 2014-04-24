@@ -40,7 +40,7 @@ import oracle.toplink.sessions.Session;
  *
  * @author <a href="mailto:james.x.clark@oracle.com">James Clark</a>
  * @author Juergen Hoeller
- * @since 1.2.6
+ * @since Spring framework 1.2.6
  * @see org.springframework.orm.toplink.ServerSessionFactory
  * @see oracle.toplink.threetier.ServerSession#acquireClientSession()
  * @see oracle.toplink.sessionbroker.SessionBroker#acquireClientSessionBroker()

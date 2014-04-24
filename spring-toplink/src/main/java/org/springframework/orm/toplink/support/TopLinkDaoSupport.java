@@ -41,7 +41,7 @@ import org.springframework.orm.toplink.TopLinkTemplate;
  * methods are provided for that usage style.
  *
  * @author Juergen Hoeller
- * @since 1.2
+ * @since Spring framework 1.2
  * @see #setSessionFactory
  * @see #setTopLinkTemplate
  * @see #getSession

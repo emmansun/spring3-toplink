@@ -62,7 +62,7 @@ import org.springframework.transaction.support.TransactionSynchronizationManager
  * and/or when relying on exception translation.
  *
  * @author Juergen Hoeller
- * @since 1.2
+ * @since Spring framework 1.2
  */
 public class TopLinkInterceptor extends TopLinkAccessor implements MethodInterceptor {
 

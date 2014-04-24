@@ -25,7 +25,7 @@ import org.springframework.dao.InvalidDataAccessResourceUsageException;
  * thrown on invalid TopLink query syntax or behavior.
  *
  * @author Juergen Hoeller
- * @since 1.2
+ * @since Spring framework 1.2
  */
 @SuppressWarnings("serial")
 public class TopLinkQueryException extends InvalidDataAccessResourceUsageException {

@@ -26,7 +26,7 @@ import org.springframework.dao.UncategorizedDataAccessException;
  * <code>org.springframework.dao</code> exceptions.
  *
  * @author Juergen Hoeller
- * @since 1.2
+ * @since Spring framework 1.2
  * @see SessionFactoryUtils#convertTopLinkAccessException
  */
 @SuppressWarnings("serial")

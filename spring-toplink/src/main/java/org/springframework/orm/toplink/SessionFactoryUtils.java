@@ -43,7 +43,7 @@ import org.springframework.util.Assert;
  *
  * @author Juergen Hoeller
  * @author <a href="mailto:james.x.clark@oracle.com">James Clark</a>
- * @since 1.2
+ * @since Spring framework 1.2
  */
 public abstract class SessionFactoryUtils {
 

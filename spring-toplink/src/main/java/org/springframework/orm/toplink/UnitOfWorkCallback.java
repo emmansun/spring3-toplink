@@ -29,7 +29,7 @@ import oracle.toplink.sessions.UnitOfWork;
  * that will be committed at the end of the operation.
  *
  * @author Juergen Hoeller
- * @since 1.2
+ * @since Spring framework 1.2
  * @see #doInUnitOfWork(oracle.toplink.sessions.UnitOfWork)
  * @see oracle.toplink.sessions.Session#getActiveUnitOfWork()
  */

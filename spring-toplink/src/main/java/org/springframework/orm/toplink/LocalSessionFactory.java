@@ -83,7 +83,7 @@ import org.springframework.util.ReflectionUtils;
  *
  * @author Juergen Hoeller
  * @author <a href="mailto:james.x.clark@oracle.com">James Clark</a>
- * @since 1.2
+ * @since Spring framework 1.2
  * @see LocalSessionFactoryBean
  * @see TopLinkTemplate#setSessionFactory
  * @see TopLinkTransactionManager#setSessionFactory

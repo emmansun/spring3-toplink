@@ -73,7 +73,7 @@ import org.springframework.util.StringUtils;
  *
  * @author Juergen Hoeller
  * @author <a href="mailto:james.x.clark@oracle.com">James Clark</a>
- * @since 1.2
+ * @since Spring framework 1.2
  * @see #setSessionFactory
  * @see TopLinkCallback
  * @see oracle.toplink.sessions.Session

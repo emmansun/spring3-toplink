@@ -85,7 +85,7 @@ import org.springframework.transaction.support.TransactionSynchronizationManager
  *
  * @author Juergen Hoeller
  * @author <a href="mailto:james.x.clark@oracle.com">James Clark</a>
- * @since 1.2
+ * @since Spring framework 1.2
  * @see #setSessionFactory
  * @see #setDataSource
  * @see LocalSessionFactoryBean

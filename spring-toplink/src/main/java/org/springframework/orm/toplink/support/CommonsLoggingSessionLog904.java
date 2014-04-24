@@ -41,7 +41,7 @@ import org.apache.commons.logging.LogFactory;
  * obsolete (deprecated and bypassed) as of TopLink 10.1.3.
  *
  * @author Juergen Hoeller
- * @since 1.2
+ * @since Spring framework 1.2
  * @see CommonsLoggingSessionLog
  * @see oracle.toplink.sessions.DefaultSessionLog
  * @see org.springframework.orm.toplink.LocalSessionFactoryBean#setSessionLog

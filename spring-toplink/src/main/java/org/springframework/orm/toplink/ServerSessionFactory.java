@@ -32,7 +32,7 @@ import oracle.toplink.threetier.ServerSession;
  * active transactional Session on <code>getActiveSession</code>.
  *
  * @author Juergen Hoeller
- * @since 1.2
+ * @since Spring framework 1.2
  * @see SingleSessionFactory
  * @see oracle.toplink.sessions.Session#getActiveUnitOfWork()
  * @see oracle.toplink.sessions.Session#getActiveSession()

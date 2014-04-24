@@ -35,7 +35,7 @@ import oracle.toplink.sessions.UnitOfWork;
  * Session itself, avoiding the UnitOfWork overhead in any case.
  *
  * @author Juergen Hoeller
- * @since 1.2
+ * @since Spring framework 1.2
  * @see oracle.toplink.sessions.Session#getActiveUnitOfWork()
  * @see #readFromSession(oracle.toplink.sessions.Session)
  */

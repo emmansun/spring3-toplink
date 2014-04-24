@@ -36,7 +36,7 @@ import org.springframework.jdbc.support.SQLExceptionTranslator;
  * <p>Thanks to Slavik Markovich for implementing the initial TopLink support prototype!
  *
  * @author Juergen Hoeller
- * @since 1.2
+ * @since Spring framework 1.2
  * @see TopLinkTemplate
  * @see TopLinkInterceptor
  */

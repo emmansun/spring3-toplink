@@ -47,7 +47,7 @@ import org.springframework.util.ReflectionUtils;
  * <code>oracle.toplink.logging</code> package, supporting log categories.
  *
  * @author Juergen Hoeller
- * @since 1.2
+ * @since Spring framework 1.2
  * @see CommonsLoggingSessionLog904
  * @see oracle.toplink.logging.JavaLog
  * @see org.springframework.orm.toplink.LocalSessionFactoryBean#setSessionLog
