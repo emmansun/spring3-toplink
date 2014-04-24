@@ -379,18 +379,21 @@ public class TopLinkTemplate extends TopLinkAccessor implements TopLinkOperation
 		});
 	}
 
-	public List<Object> copyAll(Collection<?> entities) throws DataAccessException {
+	@SuppressWarnings("rawtypes")
+	public List copyAll(Collection<?> entities) throws DataAccessException {
 		ObjectCopyingPolicy copyingPolicy = new ObjectCopyingPolicy();
 		copyingPolicy.cascadeAllParts();
 		copyingPolicy.setShouldResetPrimaryKey(false);
 		return copyAll(entities, copyingPolicy);
 	}
 
-	public List<Object> copyAll(final Collection<?> entities, final ObjectCopyingPolicy copyingPolicy)
+	@SuppressWarnings("rawtypes")
+	public List copyAll(final Collection<?> entities, final ObjectCopyingPolicy copyingPolicy)
 			throws DataAccessException {
-		return execute(new TopLinkCallback<List<Object>>() {
-			public List<Object> doInTopLink(Session session) throws TopLinkException {
-				List<Object> result = new ArrayList<Object>(entities.size());
+		return execute(new TopLinkCallback<List>() {
+			@SuppressWarnings("unchecked")
+			public List doInTopLink(Session session) throws TopLinkException {
+				List result = new ArrayList(entities.size());
 				for (Iterator<?> it = entities.iterator(); it.hasNext();) {
 					Object entity = it.next();
 					result.add(session.copyObject(entity, copyingPolicy));
@@ -413,14 +416,17 @@ public class TopLinkTemplate extends TopLinkAccessor implements TopLinkOperation
 		});
 	}
 
-	public List<Object> refreshAll(Collection<?> entities) throws DataAccessException {
+	@SuppressWarnings("rawtypes")
+	public List refreshAll(Collection<?> entities) throws DataAccessException {
 		return refreshAll(entities, false);
 	}
 
-	public List<Object> refreshAll(final Collection<?> entities, final boolean enforceReadOnly) throws DataAccessException {
-		return execute(new SessionReadCallback<List<Object>>(enforceReadOnly) {
-			protected List<Object> readFromSession(Session session) throws TopLinkException {
-				List<Object> result = new ArrayList<Object>(entities.size());
+	@SuppressWarnings("rawtypes")
+	public List refreshAll(final Collection<?> entities, final boolean enforceReadOnly) throws DataAccessException {
+		return execute(new SessionReadCallback<List>(enforceReadOnly) {
+			@SuppressWarnings("unchecked")
+			protected List readFromSession(Session session) throws TopLinkException {
+				List result = new ArrayList(entities.size());
 				for (Iterator<?> it = entities.iterator(); it.hasNext();) {
 					Object entity = it.next();
 					result.add(session.refreshObject(entity));
@@ -444,10 +450,10 @@ public class TopLinkTemplate extends TopLinkAccessor implements TopLinkOperation
 		});
 	}
 
-	public List<Object> registerAll(final Collection<?> entities) {
-		return execute(new UnitOfWorkCallback<List<Object>>() {
-			@SuppressWarnings("unchecked")
-			protected List<Object> doInUnitOfWork(UnitOfWork unitOfWork) throws TopLinkException {
+	@SuppressWarnings("rawtypes")
+	public List registerAll(final Collection<?> entities) {
+		return execute(new UnitOfWorkCallback<List>() {
+			protected List doInUnitOfWork(UnitOfWork unitOfWork) throws TopLinkException {
 				return unitOfWork.registerAllObjects(entities);
 			}
 		});

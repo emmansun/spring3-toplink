@@ -503,7 +503,7 @@ public interface TopLinkOperations {
 	 * @throws org.springframework.dao.DataAccessException in case of TopLink errors
 	 * @see oracle.toplink.sessions.Session#copyObject(Object)
 	 */
-	List<Object> copyAll(Collection<?> entities) throws DataAccessException;
+	List copyAll(Collection<?> entities) throws DataAccessException;
 
 	/**
 	 * Create detached copies of all given entity objects.
@@ -513,7 +513,7 @@ public interface TopLinkOperations {
 	 * @throws org.springframework.dao.DataAccessException in case of TopLink errors
 	 * @see oracle.toplink.sessions.Session#copyObject(Object)
 	 */
-	List<Object> copyAll(Collection<?> entities, ObjectCopyingPolicy copyingPolicy) throws DataAccessException;
+	List copyAll(Collection<?> entities, ObjectCopyingPolicy copyingPolicy) throws DataAccessException;
 
 	/**
 	 * Refresh the given entity object, returning the refreshed object.
@@ -558,7 +558,7 @@ public interface TopLinkOperations {
 	 * @throws org.springframework.dao.DataAccessException in case of TopLink errors
 	 * @see oracle.toplink.sessions.Session#refreshObject(Object)
 	 */
-	List<Object> refreshAll(Collection<?> entities) throws DataAccessException;
+	List refreshAll(Collection<?> entities) throws DataAccessException;
 
 	/**
 	 * Refresh the given entity objects, returning the corresponding refreshed objects.
@@ -573,7 +573,7 @@ public interface TopLinkOperations {
 	 * @throws org.springframework.dao.DataAccessException in case of TopLink errors
 	 * @see oracle.toplink.sessions.Session#refreshObject(Object)
 	 */
-	List<Object> refreshAll(Collection<?> entities, boolean enforceReadOnly) throws DataAccessException;
+	List refreshAll(Collection<?> entities, boolean enforceReadOnly) throws DataAccessException;
 
 
 	//-------------------------------------------------------------------------
@@ -606,7 +606,7 @@ public interface TopLinkOperations {
 	 * @throws org.springframework.dao.DataAccessException in case of TopLink errors
 	 * @see oracle.toplink.sessions.UnitOfWork#registerAllObjects(java.util.Collection)
 	 */
-	List<Object> registerAll(Collection<?> entities);
+	List registerAll(Collection<?> entities);
 
 	/**
 	 * Register the given new entity with the current UnitOfWork.
