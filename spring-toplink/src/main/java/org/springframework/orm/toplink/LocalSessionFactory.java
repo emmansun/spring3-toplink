@@ -16,8 +16,6 @@
 
 package org.springframework.orm.toplink;
 
-import java.lang.reflect.Constructor;
-import java.lang.reflect.Method;
 import java.util.HashMap;
 import java.util.Map;
 import java.util.Properties;
@@ -30,9 +28,9 @@ import oracle.toplink.jndi.JNDIConnector;
 import oracle.toplink.sessionbroker.SessionBroker;
 import oracle.toplink.sessions.DatabaseLogin;
 import oracle.toplink.sessions.DatabaseSession;
-import oracle.toplink.sessions.SessionLog;
+import oracle.toplink.logging.SessionLog;
 import oracle.toplink.threetier.ServerSession;
-import oracle.toplink.tools.sessionconfiguration.XMLLoader;
+import oracle.toplink.tools.sessionconfiguration.XMLSessionConfigLoader;
 import oracle.toplink.tools.sessionmanagement.SessionManager;
 import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
@@ -40,7 +38,6 @@ import org.apache.commons.logging.LogFactory;
 import org.springframework.beans.PropertyAccessorFactory;
 import org.springframework.util.ClassUtils;
 import org.springframework.util.CollectionUtils;
-import org.springframework.util.ReflectionUtils;
 
 /**
  * Convenient JavaBean-style factory for a TopLink SessionFactory instance.
@@ -71,10 +68,6 @@ import org.springframework.util.ReflectionUtils;
  * CommonsLoggingSessionLog to the "sessionLog" bean property. Otherwise, TopLink
  * uses it's own DefaultSessionLog, whose levels are configured in the
  * <code>sessions.xml</code> file.
- *
- * <p>This class has been tested against both TopLink 9.0.4 and TopLink 10.1.3.
- * It will automatically adapt to the TopLink version encountered: for example,
- * using an XMLSessionConfigLoader on 10.1.3, but an XMLLoader on 9.0.4.
  *
  * <p><b>NOTE:</b> When defining a TopLink SessionFactory in a Spring application
  * context, you will usually define a bean of type <b>LocalSessionFactoryBean</b>.
@@ -260,9 +253,7 @@ public class LocalSessionFactory {
 	 * Specify a TopLink SessionLog instance to use for detailed logging of the
 	 * Session's activities: for example, DefaultSessionLog (which logs to the
 	 * console), JavaLog (which logs through JDK 1.4'S <code>java.util.logging</code>,
-	 * available as of TopLink 10.1.3), or CommonsLoggingSessionLog /
-	 * CommonsLoggingSessionLog904 (which logs through Commons Logging,
-	 * on TopLink 10.1.3 and 9.0.4, respectively).
+	 * available as of TopLink 10.1.3), or CommonsLoggingSessionLog which logs through Commons Logging.
 	 * <p>Note that detailed Session logging is usually only useful for debug
 	 * logging, with adjustable detail level. As of TopLink 10.1.3, TopLink also
 	 * uses different log categories, which allows for fine-grained filtering of
@@ -330,7 +321,9 @@ public class LocalSessionFactory {
 		// Override default SessionLog with specified one, if any.
 		if (this.sessionLog != null) {
 			session.setSessionLog(this.sessionLog);
-			session.logMessages();
+			if (session.getLogLevel(null)>SessionLog.FINER) {
+				session.setLogLevel(SessionLog.FINER);
+			}
 		}
 
 		// Log in and create corresponding SessionFactory.
@@ -338,36 +331,8 @@ public class LocalSessionFactory {
 		return newSessionFactory(session);
 	}
 
-	/**
-	 * Handle differences between the <code>Session.setLogin</code> interface
-	 * between TopLink 9.0.4 to 10.1.3.
-	 * <p>The Login interface was introduced in TopLink 10.1.3.
-	 * @param session the DatabaseSession being logged in
-	 * @param login the DatabaseLogin injected by Spring
-	 * @see oracle.toplink.sessions.DatabaseSession#setLogin
-	 */
 	protected void setDatabaseLogin(DatabaseSession session, DatabaseLogin login) {
-		Method setLoginMethod = null;
-		try {
-			// Search for the new 10.1.3 Login interface...
-			Class<?> loginClass = DatabaseSession.class.getClassLoader().loadClass("oracle.toplink.sessions.Login");
-			setLoginMethod = DatabaseSession.class.getMethod("setLogin", new Class[] {loginClass});
-			if (logger.isDebugEnabled()) {
-				logger.debug("Using TopLink 10.1.3 setLogin(Login) API");
-			}
-		}
-		catch (Exception ex) {
-			// TopLink 10.1.3 Login interface not found ->
-			// fall back to TopLink 9.0.4's setLogin(DatabaseLogin)
-			if (logger.isDebugEnabled()) {
-				logger.debug("Using TopLink 9.0.4 setLogin(DatabaseLogin) API");
-			}
-			session.setLogin(login);
-			return;
-		}
-
-		// Invoke the 10.1.3 version: Session.setLogin(Login)
-		ReflectionUtils.invokeMethod(setLoginMethod, session, new Object[] {login});
+		session.setLogin(login);
 	}
 
 	/**
@@ -379,45 +344,15 @@ public class LocalSessionFactory {
 	 * @return the DatabaseSession instance
 	 * @throws TopLinkException in case of errors
 	 */
-	protected DatabaseSession loadDatabaseSession(
-			String configLocation, String sessionName, ClassLoader sessionClassLoader)
+	protected DatabaseSession loadDatabaseSession(String configLocation,
+			String sessionName, ClassLoader sessionClassLoader)
 			throws TopLinkException {
 
 		SessionManager manager = getSessionManager();
-
-		// Try to find TopLink 10.1.3 XMLSessionConfigLoader.
-		Method getSessionMethod = null;
-		Object loader = null;
-		try {
-			Class<?> loaderClass = SessionManager.class.getClassLoader().loadClass(
-					"oracle.toplink.tools.sessionconfiguration.XMLSessionConfigLoader");
-			getSessionMethod = SessionManager.class.getMethod("getSession",
-					new Class[] {loaderClass, String.class, ClassLoader.class, boolean.class, boolean.class, boolean.class});
-			if (logger.isDebugEnabled()) {
-				logger.debug("Using TopLink 10.1.3 XMLSessionConfigLoader");
-			}
-			Constructor<?> ctor = loaderClass.getConstructor(new Class[] {String.class});
-			loader = ctor.newInstance(new Object[] {configLocation});
-		}
-		catch (Exception ex) {
-			// TopLink 10.1.3 XMLSessionConfigLoader not found ->
-			// fall back to TopLink 9.0.4 XMLLoader.
-			if (logger.isDebugEnabled()) {
-				logger.debug("Using TopLink 9.0.4 XMLLoader");
-			}
-			XMLLoader xmlLoader = new XMLLoader(configLocation);
-			return (DatabaseSession) manager.getSession(xmlLoader, sessionName, sessionClassLoader, false, false);
-		}
-
-		// TopLink 10.1.3 XMLSessionConfigLoader found -> create loader instance
-		// through reflection and fetch specified Session from SessionManager.
-		// This invocation will check if the ClassLoader passed in is the same
-		// as the one used to a session currently loaded with the same "sessionName"
-		// If the ClassLoaders are different, then this LocalSessionFactory is being
-		// re-loaded after a hot-deploy and the existing DatabaseSession will be logged
-		// out and re-built from scratch.
-		return (DatabaseSession) ReflectionUtils.invokeMethod(getSessionMethod, manager,
-				new Object[] {loader, sessionName, sessionClassLoader, Boolean.FALSE, Boolean.FALSE, Boolean.TRUE});
+		XMLSessionConfigLoader configLoader = new XMLSessionConfigLoader(
+				configLocation);
+		return (DatabaseSession) manager.getSession(configLoader, sessionName,
+				sessionClassLoader, Boolean.FALSE, Boolean.FALSE, Boolean.TRUE);
 	}
 
 	/**

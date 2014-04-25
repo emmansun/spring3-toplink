@@ -21,7 +21,7 @@ import java.lang.reflect.Method;
 import oracle.toplink.internal.databaseaccess.Accessor;
 import oracle.toplink.logging.AbstractSessionLog;
 import oracle.toplink.logging.SessionLogEntry;
-import oracle.toplink.publicinterface.Session;
+import oracle.toplink.sessions.Session;
 import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
 

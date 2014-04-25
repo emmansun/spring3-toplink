@@ -20,7 +20,7 @@ import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertNotNull;
 import static org.junit.Assert.fail;
 import oracle.toplink.exceptions.ValidationException;
-import oracle.toplink.publicinterface.UnitOfWork;
+import oracle.toplink.internal.sessions.UnitOfWorkImpl;
 import oracle.toplink.sessionbroker.SessionBroker;
 import oracle.toplink.sessions.Session;
 
@@ -101,8 +101,8 @@ public class SessionBrokerFactoryTests {
 		public MockClientSessionBroker() {
 		}
 
-		public UnitOfWork acquireUnitOfWork() {
-			return new UnitOfWork(this);
+		public UnitOfWorkImpl acquireUnitOfWork() {
+			return new UnitOfWorkImpl(this);
 		}
 	}
 }

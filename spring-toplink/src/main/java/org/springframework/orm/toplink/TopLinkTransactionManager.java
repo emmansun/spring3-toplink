@@ -340,14 +340,14 @@ public class TopLinkTransactionManager extends AbstractPlatformTransactionManage
 	 * @see oracle.toplink.internal.databaseaccess.DatabaseAccessor#getConnection()
 	 */
 	protected Connection getJdbcConnection(Session session) {
-		if (!(session instanceof oracle.toplink.publicinterface.Session)) {
+		if (!(session instanceof oracle.toplink.internal.sessions.AbstractSession)) {
 			if (logger.isDebugEnabled()) {
 				logger.debug("TopLink Session [" + session +
 						"] does not derive from [oracle.toplink.publicinterface.Session]");
 			}
 			return null;
 		}
-		Accessor accessor = ((oracle.toplink.publicinterface.Session) session).getAccessor();
+		Accessor accessor = ((oracle.toplink.internal.sessions.AbstractSession) session).getAccessor();
 		if (!(accessor instanceof DatabaseAccessor)) {
 			if (logger.isDebugEnabled()) {
 				logger.debug("TopLink Accessor [" + accessor +
